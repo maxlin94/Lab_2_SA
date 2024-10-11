@@ -2,6 +2,7 @@ package org.example.rest;
 
 
 import jakarta.inject.Inject;
+import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
@@ -15,7 +16,7 @@ import java.util.Optional;
 @Path("/")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-public class WarehouseResource {
+public class    WarehouseResource {
     @Inject
     private Warehouse warehouse;
 
@@ -28,7 +29,7 @@ public class WarehouseResource {
 
     @GET
     @Path("/products/{id}")
-    public Response getProductById(@PathParam("id") String id) {
+    public Response getProductById(@PathParam("id") @Valid String id) {
         Optional<Product> product = warehouse.getProductById(id);
         if (product.isPresent()) {
             return Response.ok(product.get()).build();
@@ -38,7 +39,7 @@ public class WarehouseResource {
 
     @GET
     @Path("/products/category/{category}")
-    public Response getProductsByCategory(@PathParam("category") String category) {
+    public Response getProductsByCategory(@PathParam("category") @Valid String category) {
         Category cat;
         try {
             cat = Category.valueOf(category.toUpperCase());
@@ -51,7 +52,7 @@ public class WarehouseResource {
     @POST
     @Path("/products/add")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response addProduct(Product product) {
+    public Response addProduct(@Valid Product product) {
         try {
             warehouse.addProduct(product);
             return Response.status(Response.Status.CREATED).build();
