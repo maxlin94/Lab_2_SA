@@ -40,11 +40,22 @@ public class WarehouseResource {
     @Path("/products/category/{category}")
     public Response getProductsByCategory(@PathParam("category") String category) {
         Category cat;
-        try  {
+        try {
             cat = Category.valueOf(category.toUpperCase());
             return Response.ok(warehouse.getProductsByCategory(cat)).build();
+        } catch (IllegalArgumentException e) {
+            return Response.status(Response.Status.BAD_REQUEST).build();
         }
-        catch (IllegalArgumentException e) {
+    }
+
+    @POST
+    @Path("/products/add")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response addProduct(Product product) {
+        try {
+            warehouse.addProduct(product);
+            return Response.status(Response.Status.CREATED).build();
+        } catch (IllegalArgumentException e) {
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
     }

@@ -14,7 +14,7 @@ public class Warehouse {
     private final List<Product> products = new ArrayList<>();
 
     public void addProduct(Product product) {
-        if(products.stream().anyMatch(p -> p.id().equals(product.id()))) {
+        if (products.stream().anyMatch(p -> p.id().equals(product.id()))) {
             throw new IllegalArgumentException("Product already exists");
         }
         products.add(product);
@@ -31,7 +31,7 @@ public class Warehouse {
                     product.creationDate(),
                     LocalDate.now()
             );
-            products.remove(product);   
+            products.remove(product);
             products.add(modifiedProduct);
         });
     }
@@ -68,7 +68,7 @@ public class Warehouse {
     public List<Category> getNonEmptyCategories() {
         List<Category> categories = new ArrayList<>();
         products.forEach(product -> {
-            if(!categories.contains(product.category())) {
+            if (!categories.contains(product.category())) {
                 categories.add(product.category());
             }
         });
