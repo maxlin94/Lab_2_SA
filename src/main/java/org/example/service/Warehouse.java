@@ -1,6 +1,7 @@
 package org.example.service;
 
 
+import jakarta.enterprise.context.ApplicationScoped;
 import org.example.entities.Category;
 import org.example.entities.Product;
 
@@ -8,6 +9,7 @@ import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
+@ApplicationScoped
 public class Warehouse {
     private final List<Product> products = new ArrayList<>();
 
