@@ -8,11 +8,13 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.example.entities.Category;
 import org.example.entities.Product;
+import org.example.interceptor.Log;
 import org.example.service.Warehouse;
 
 import java.util.List;
 import java.util.Optional;
 
+@Log
 @Path("/")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
