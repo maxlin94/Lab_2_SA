@@ -7,11 +7,12 @@ import org.example.entities.Product;
 
 import java.time.LocalDate;
 import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
 
 @ApplicationScoped
 public class Warehouse {
-    private final List<Product> products = new ArrayList<>();
+    private final List<Product> products = new CopyOnWriteArrayList<>();
 
     public void addProduct(Product product) {
         if (products.stream().anyMatch(p -> p.id().equals(product.id()))) {
