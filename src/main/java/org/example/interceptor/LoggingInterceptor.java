@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 @Priority(Interceptor.Priority.APPLICATION)
 @Log
 public class LoggingInterceptor {
-    Logger logger = LoggerFactory.getLogger(LoggingInterceptor.class);
+    private final Logger logger = LoggerFactory.getLogger(LoggingInterceptor.class);
 
     @AroundInvoke
     public Object intercept(InvocationContext ic) throws Exception {

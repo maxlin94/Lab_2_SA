@@ -9,7 +9,7 @@ import jakarta.ws.rs.core.Response;
 import org.example.entities.Category;
 import org.example.entities.Product;
 import org.example.interceptor.Log;
-import org.example.service.Warehouse;
+import org.example.service.WarehouseService;
 
 import java.util.List;
 import java.util.Optional;
@@ -18,9 +18,17 @@ import java.util.Optional;
 @Path("/")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-public class    WarehouseResource {
+public class WarehouseResource {
+    private WarehouseService warehouse;
+
+    public WarehouseResource() {
+    }
+
     @Inject
-    private Warehouse warehouse;
+    public WarehouseResource(WarehouseService warehouse) {
+        this.warehouse = warehouse;
+    }
+
 
     @GET
     @Path("/products")
@@ -52,7 +60,7 @@ public class    WarehouseResource {
     }
 
     @POST
-    @Path("/products/add")
+    @Path("/products")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response addProduct(@Valid Product product) {
         try {

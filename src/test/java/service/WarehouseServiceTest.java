@@ -1,6 +1,8 @@
+package service;
+
 import org.example.entities.Category;
 import org.example.entities.Product;
-import org.example.service.Warehouse;
+import org.example.service.WarehouseService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -10,8 +12,8 @@ import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class WarehouseTest {
-    private Warehouse warehouse;
+class WarehouseServiceTest {
+    private WarehouseService warehouseService;
     private final LocalDate now = LocalDate.now();
     private final List<Product> products = Arrays.asList(
             new Product("1", "Shirt", Category.SHIRT, 8, now.minusDays(2), now.minusDays(1)),
@@ -26,9 +28,9 @@ class WarehouseTest {
 
     @BeforeEach
     void setUp() {
-        warehouse = new Warehouse();
+        warehouseService = new WarehouseService();
         products.forEach(product -> {
-            warehouse.addProduct(product);
+            warehouseService.addProduct(product);
             if (!categories.contains(product.category())) {
                 categories.add(product.category());
             }
@@ -37,23 +39,23 @@ class WarehouseTest {
 
     @Test
     void testAddProduct() {
-        assertEquals(TOTAL_PRODUCTS, warehouse.getAllProducts().size());
+        assertEquals(TOTAL_PRODUCTS, warehouseService.getAllProducts().size());
         Product product = new Product("123", "Shirt", Category.SHIRT, 8, LocalDate.now(), LocalDate.now());
-        warehouse.addProduct(product);
-        assertEquals(TOTAL_PRODUCTS + 1, warehouse.getAllProducts().size());
+        warehouseService.addProduct(product);
+        assertEquals(TOTAL_PRODUCTS + 1, warehouseService.getAllProducts().size());
     }
 
     @Test
     void throwsWhenDuplicateIdProducts() {
         Product product = new Product("1", "Shirt", Category.SHIRT, 8, LocalDate.now(), LocalDate.now());
-        assertThrows(IllegalArgumentException.class, () -> warehouse.addProduct(product));
-        assertEquals(TOTAL_PRODUCTS, warehouse.getAllProducts().size());
+        assertThrows(IllegalArgumentException.class, () -> warehouseService.addProduct(product));
+        assertEquals(TOTAL_PRODUCTS, warehouseService.getAllProducts().size());
     }
 
     @Test
     void testModifyProduct() {
-        warehouse.modifyProduct("1", "New Shirt", Category.SHIRT, 9);
-        Optional<Product> modifiedProduct = warehouse.getProductById("1");
+        warehouseService.modifyProduct("1", "New Shirt", Category.SHIRT, 9);
+        Optional<Product> modifiedProduct = warehouseService.getProductById("1");
         modifiedProduct.ifPresent(product -> {
             assertEquals("New Shirt", product.name());
             assertEquals(9, product.rating());
@@ -64,21 +66,21 @@ class WarehouseTest {
     @Test
     void testGetProductById() {
         Product product = new Product("1", "Shirt", Category.SHIRT, 8, now.minusDays(2), now.minusDays(1));
-        Optional<Product> optionalProduct = warehouse.getProductById("1");
+        Optional<Product> optionalProduct = warehouseService.getProductById("1");
         assertTrue(optionalProduct.isPresent());
         assertEquals(product, optionalProduct.get());
     }
 
     @Test
     void testEmptyOptionalWhenIDNotFound() {
-        assertTrue(warehouse.getProductById("000").isEmpty());
+        assertTrue(warehouseService.getProductById("000").isEmpty());
     }
 
     @Test
     void testGetProductsByCategorySortedByName() {
         assertEquals(
                 List.of("aaa", "jeans", "Other Jeans", "ZZZ"),
-                warehouse.getProductsByCategory(Category.JEANS)
+                warehouseService.getProductsByCategory(Category.JEANS)
                         .stream()
                         .map(Product::name)
                         .collect(Collectors.toList())
@@ -87,36 +89,36 @@ class WarehouseTest {
 
     @Test
     void testGetProductsCreatedAfter() {
-        assertEquals(4, warehouse.getProductsCreatedAfter(LocalDate.now().minusDays(3)).size());
+        assertEquals(4, warehouseService.getProductsCreatedAfter(LocalDate.now().minusDays(3)).size());
     }
 
     @Test
     void testGetModifiedProducts() {
-        List<Product> products = warehouse.getModifiedProducts();
+        List<Product> products = warehouseService.getModifiedProducts();
         assertEquals(2, products.size());
         assertTrue(products.stream().allMatch(product -> product.lastModifiedDate().isAfter(product.creationDate())));
     }
 
     @Test
     void testGetNonEmptyCategories() {
-        assertEquals(categories, warehouse.getNonEmptyCategories());
+        assertEquals(categories, warehouseService.getNonEmptyCategories());
     }
 
     @Test
     void testGetNumberProductsOfCategory() {
-        assertEquals(1, warehouse.getNumberProductsByCategory(Category.SHIRT));
+        assertEquals(1, warehouseService.getNumberProductsByCategory(Category.SHIRT));
     }
 
     @Test
     void testGetProductStartingLetterMap() {
-        Map<Character, Long> map = warehouse.getProductStartingLetterMap();
+        Map<Character, Long> map = warehouseService.getProductStartingLetterMap();
         assertEquals(1, map.get('S'));
         assertEquals(1, map.get('H'));
     }
 
     @Test
     void testGetMaxRatedProductsLastMonth() {
-        List<Product> products = warehouse.getMaxRatedProductsLastMonth();
+        List<Product> products = warehouseService.getMaxRatedProductsLastMonth();
         assertEquals(1, products.size());
         assertTrue(products.stream().allMatch(product ->
                 product.rating() == 10 && product.creationDate().isAfter(LocalDate.now().minusMonths(1))));
