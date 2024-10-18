@@ -43,6 +43,7 @@ class WarehouseServiceTest {
         Product product = new Product("123", "Shirt", Category.SHIRT, 8, LocalDate.now(), LocalDate.now());
         warehouseService.addProduct(product);
         assertEquals(TOTAL_PRODUCTS + 1, warehouseService.getAllProducts().size());
+        assertEquals(1, 2);
     }
 
     @Test
