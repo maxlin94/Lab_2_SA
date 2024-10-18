@@ -38,4 +38,4 @@ jobs:
           context: .
           platforms: linux/amd64,linux/arm64
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/Lab_2_SA:latest
+          tags: ${{ secrets.DOCKER_USERNAME }}/warehouse:latest
