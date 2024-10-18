@@ -44,10 +44,15 @@ public class WarehouseResourceTest {
     WarehouseResource warehouseResource;
 
 
-    private JSONObject convertProductToJson(Product product) throws JsonProcessingException, JSONException {
+    private ObjectMapper getObjectMapper() {
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new JavaTimeModule());
         mapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
+        return mapper;
+    }
+
+    private JSONObject convertProductToJson(Product product) throws JsonProcessingException, JSONException {
+        ObjectMapper mapper = getObjectMapper();
         String jsonString = mapper.writeValueAsString(product);
         return new JSONObject(jsonString);
     }
@@ -118,9 +123,7 @@ public class WarehouseResourceTest {
         MockHttpRequest request = MockHttpRequest.post("/products");
         MockHttpResponse response = new MockHttpResponse();
 
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.registerModule(new JavaTimeModule());
-        objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
+        ObjectMapper objectMapper = getObjectMapper();
 
         String json = objectMapper.writeValueAsString(new Product("651", "Shirt", Category.SHIRT, 5, now, now));
         request.content(json.getBytes());
@@ -156,9 +159,7 @@ public class WarehouseResourceTest {
         MockHttpRequest request = MockHttpRequest.post("/products");
         MockHttpResponse response = new MockHttpResponse();
 
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.registerModule(new JavaTimeModule());
-        objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
+        ObjectMapper objectMapper = getObjectMapper();
 
         String json = objectMapper.writeValueAsString(product);
         request.content(json.getBytes());
